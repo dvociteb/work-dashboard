@@ -1,251 +1,500 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work Tracking Dashboard</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Current Work Overview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8f9fc;
+      --card: #ffffff;
+      --text: #1A202C;
+      --muted: #718096;
+      --line: #E2E8F0;
+      --purple: #522D80;
+      --purple-dark: #3a1f5c;
+      --purple-soft: #f0ebf9;
+      --teal: #00B5AD;
+      --teal-dark: #007a75;
+      --teal-soft: #e6f9f8;
+      --complete-bg: #C6F6D5;
+      --complete-text: #22543D;
+      --planned-bg: #EDF2F7;
+      --planned-text: #4A5568;
+      --shadow: 0 10px 28px rgba(82, 45, 128, 0.08);
+      --radius: 18px;
+    }
 
-        :root {
-            --tebra-purple: #522D80;
-            --tebra-teal: #00B5AD;
-            --tebra-dark: #2D3748;
-            --tebra-light-bg: #F8F9FC;
-            --tebra-border: #E2E8F0;
-            --text-main: #1A202C;
-            --text-muted: #718096;
-            --white: #FFFFFF;
-        }
+    * { box-sizing: border-box; }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--tebra-light-bg);
-            color: var(--text-main);
-            margin: 0;
-            padding: 40px 20px;
-            line-height: 1.6;
-        }
+    body {
+      margin: 0;
+      font-family: 'Inter', "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+    }
 
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
+    .page {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 34px 24px 56px;
+    }
 
-        header {
-            text-align: center;
-            margin-bottom: 50px;
-        }
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, #522D80 0%, #00B5AD 100%);
+      color: white;
+      border-radius: 26px;
+      padding: 36px 40px;
+      box-shadow: var(--shadow);
+      margin-bottom: 22px;
+    }
 
-        h1 {
-            color: var(--tebra-purple);
-            font-size: 2.5rem;
-            margin-bottom: 5px;
-            font-weight: 700;
-        }
+    .hero h1 {
+      margin: 0 0 6px;
+      font-size: clamp(28px, 4vw, 44px);
+      letter-spacing: -0.04em;
+      font-weight: 800;
+    }
 
-        .user-info {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-        }
+    .hero-meta {
+      margin: 0;
+      color: rgba(255,255,255,0.85);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
 
-        .user-info span {
-            color: var(--tebra-teal);
-            font-weight: 600;
-        }
+    /* Summary cards */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+      margin: 18px 0 22px;
+    }
 
-        .snapshot-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            margin-bottom: 50px;
-        }
+    .summary-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 6px 20px rgba(82, 45, 128, 0.05);
+      padding: 18px;
+      cursor: pointer;
+      transition: box-shadow 0.15s, transform 0.15s, border-color 0.15s, background 0.15s;
+    }
 
-        .card {
-            background: var(--white);
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-            border-top: 5px solid var(--tebra-purple);
-        }
+    .summary-card:hover {
+      box-shadow: 0 8px 26px rgba(82, 45, 128, 0.13);
+      transform: translateY(-2px);
+    }
 
-        .card.upcoming {
-            border-top-color: var(--tebra-teal);
-        }
+    .summary-card.active-filter {
+      border-color: var(--teal);
+      background: var(--teal-soft);
+    }
 
-        .card h2 {
-            font-size: 1.25rem;
-            margin-top: 0;
-            color: var(--tebra-dark);
-            display: flex;
-            align-items: center;
-        }
+    .summary-card .number {
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      margin-bottom: 2px;
+      color: var(--purple);
+    }
 
-        .card h2 .icon {
-            margin-right: 10px;
-        }
+    .summary-card .label {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
 
-        .task-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
+    /* Sticky controls */
+    .controls {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(248, 249, 252, 0.94);
+      backdrop-filter: blur(12px);
+      padding: 14px 0 16px;
+      margin-bottom: 8px;
+    }
 
-        .task-item {
-            padding: 12px 0;
-            border-bottom: 1px solid var(--tebra-border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    .control-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 14px;
+      box-shadow: 0 6px 20px rgba(82, 45, 128, 0.05);
+      display: grid;
+      grid-template-columns: minmax(220px, 1.4fr) minmax(160px, 0.7fr) auto;
+      gap: 12px;
+      align-items: center;
+    }
 
-        .task-item:last-child {
-            border-bottom: none;
-        }
+    input, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px 13px;
+      font-size: 14px;
+      background: white;
+      color: var(--text);
+      outline: none;
+      font-family: inherit;
+    }
 
-        .task-name {
-            font-weight: 500;
-        }
+    input:focus, select:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(0, 181, 173, 0.16);
+    }
 
-        .status-tag {
-            font-size: 0.75rem;
-            padding: 4px 10px;
-            border-radius: 20px;
-            text-transform: uppercase;
-            font-weight: 700;
-        }
+    #clearBtn {
+      display: none;
+      padding: 11px 18px;
+      border: 1.5px solid var(--teal);
+      border-radius: 12px;
+      background: white;
+      color: var(--teal-dark);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      font-family: inherit;
+      transition: background 0.15s;
+    }
 
-        .status-complete { background: #C6F6D5; color: #22543D; }
-        .status-progress { background: #BEE3F8; color: #2A4365; }
-        .status-pending { background: #EDF2F7; color: #4A5568; }
+    #clearBtn:hover { background: var(--teal-soft); }
 
-        .section-title {
-            font-size: 1.5rem;
-            color: var(--tebra-purple);
-            margin-bottom: 25px;
-            border-bottom: 2px solid var(--tebra-border);
-            padding-bottom: 10px;
-        }
+    /* Section titles */
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 16px;
+      margin: 30px 0 14px;
+    }
 
-        .project-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-        }
+    .section-title h2 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: -0.03em;
+      color: var(--purple);
+      font-weight: 700;
+    }
 
-        .project-tile {
-            background: var(--white);
-            border: 1px solid var(--tebra-border);
-            border-radius: 10px;
-            padding: 20px;
-            transition: transform 0.2s ease;
-        }
+    .section-title span {
+      color: var(--muted);
+      font-size: 14px;
+    }
 
-        .project-tile:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        }
+    /* Period grid (Recent / Upcoming) */
+    .period-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
 
-        .project-tile h3 {
-            margin: 0 0 10px 0;
-            color: var(--tebra-purple);
-        }
+    .period-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 6px 20px rgba(82, 45, 128, 0.05);
+      padding: 22px;
+    }
 
-        .project-desc {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            margin-bottom: 15px;
-        }
+    .period-card h3 {
+      margin: 0 0 14px;
+      font-size: 17px;
+      letter-spacing: -0.02em;
+      font-weight: 700;
+      padding-left: 12px;
+    }
 
-        .progress-bar-container {
-            height: 8px;
-            background: var(--tebra-border);
-            border-radius: 4px;
-            overflow: hidden;
-        }
+    .period-card.recent h3   { border-left: 4px solid var(--purple); }
+    .period-card.upcoming h3 { border-left: 4px solid var(--teal); }
 
-        .progress-bar-fill {
-            height: 100%;
-            background: var(--tebra-teal);
-        }
+    /* Task items */
+    .task-list { display: grid; gap: 1px; margin-top: 4px; }
 
-        @media (max-width: 768px) {
-            .snapshot-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    .task-item {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      padding: 9px 8px;
+      border-radius: 9px;
+      font-size: 14px;
+      transition: background 0.12s;
+    }
+
+    .period-card.recent   .task-item:hover { background: var(--purple-soft); }
+    .period-card.upcoming .task-item:hover { background: var(--teal-soft); }
+
+    .task-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      flex: 0 0 auto;
+    }
+
+    .period-card.recent   .task-dot { background: var(--purple); }
+    .period-card.upcoming .task-dot { background: var(--teal); }
+
+    .task-text {
+      flex: 1;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .task-status {
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      flex: 0 0 auto;
+    }
+
+    .status-complete { background: var(--complete-bg); color: var(--complete-text); }
+    .status-planned  { background: var(--planned-bg);  color: var(--planned-text); }
+
+    .no-results {
+      display: none;
+      color: var(--muted);
+      font-size: 14px;
+      text-align: center;
+      padding: 24px 0 8px;
+    }
+
+    /* Responsibilities */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      padding: 44px 20px;
+      border: 2px dashed var(--line);
+      border-radius: var(--radius);
+    }
+
+    @media (max-width: 900px) {
+      .summary-grid  { grid-template-columns: repeat(3, 1fr); }
+      .period-grid   { grid-template-columns: 1fr; }
+      .control-card  { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 580px) {
+      .summary-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
 </head>
 <body>
+<div class="page">
 
-<div class="container">
-    <header>
-        <h1>Current Work Overview</h1>
-        <div class="user-info">
-            <span>David Voci</span> &bull; Last Updated: <span>May 7, 2025</span>
-        </div>
-    </header>
+  <!-- Hero -->
+  <div class="hero">
+    <h1>Current Work Overview</h1>
+    <p class="hero-meta">David Voci &bull; Last Updated: May 7, 2025</p>
+  </div>
 
-    <div class="snapshot-grid">
-        <!-- Recent Work -->
-        <div class="card">
-            <h2><span class="icon">✓</span> Recent Work (Last 2 Weeks)</h2>
-            <ul class="task-list">
-                <li class="task-item">
-                    <span class="task-name">Completed next training</span>
-                    <span class="status-tag status-complete">Complete</span>
-                </li>
-                <li class="task-item">
-                    <span class="task-name">Completed compliance training</span>
-                    <span class="status-tag status-complete">Complete</span>
-                </li>
-                <li class="task-item">
-                    <span class="task-name">Met with Ebony</span>
-                    <span class="status-tag status-complete">Complete</span>
-                </li>
-                <li class="task-item">
-                    <span class="task-name">Met with Brittany</span>
-                    <span class="status-tag status-complete">Complete</span>
-                </li>
-                <li class="task-item">
-                    <span class="task-name">Met with Tatiana</span>
-                    <span class="status-tag status-complete">Complete</span>
-                </li>
-                <li class="task-item">
-                    <span class="task-name">Met with Hailene</span>
-                    <span class="status-tag status-complete">Complete</span>
-                </li>
-                <li class="task-item">
-                    <span class="task-name">Met with Christine</span>
-                    <span class="status-tag status-complete">Complete</span>
-                </li>
-            </ul>
+  <!-- Summary Stats -->
+  <div class="summary-grid">
+    <div class="summary-card active-filter" data-filter="all" onclick="setFilter(this,'all')">
+      <div class="number" id="count-all">10</div>
+      <div class="label">All Items</div>
+    </div>
+    <div class="summary-card" data-filter="complete" onclick="setFilter(this,'complete')">
+      <div class="number">7</div>
+      <div class="label">Completed</div>
+    </div>
+    <div class="summary-card" data-filter="planned" onclick="setFilter(this,'planned')">
+      <div class="number">3</div>
+      <div class="label">Upcoming</div>
+    </div>
+    <div class="summary-card" data-filter="meetings" onclick="setFilter(this,'meetings')">
+      <div class="number">5</div>
+      <div class="label">Meetings</div>
+    </div>
+    <div class="summary-card" data-filter="training" onclick="setFilter(this,'training')">
+      <div class="number">2</div>
+      <div class="label">Trainings</div>
+    </div>
+  </div>
+
+  <!-- Sticky Search & Filter Bar -->
+  <div class="controls">
+    <div class="control-card">
+      <input type="text" id="searchInput" placeholder="Search tasks…" oninput="applyFilters()" />
+      <select id="statusFilter" onchange="applyFilters()">
+        <option value="all">All Statuses</option>
+        <option value="complete">Complete</option>
+        <option value="planned">Planned</option>
+      </select>
+      <button id="clearBtn" onclick="clearFilters()">Clear Filters</button>
+    </div>
+  </div>
+
+  <!-- Work Snapshot -->
+  <div class="section-title">
+    <h2>Work Snapshot</h2>
+    <span id="snapshot-count">10 items</span>
+  </div>
+
+  <div class="period-grid">
+
+    <!-- Recent Work -->
+    <div class="period-card recent">
+      <h3>Recent Work (Last 2 Weeks)</h3>
+      <div class="task-list" id="recent-list">
+
+        <div class="task-item" data-status="complete" data-tags="training">
+          <div class="task-dot"></div>
+          <div class="task-text">Completed next training</div>
+          <span class="task-status status-complete">Complete</span>
         </div>
 
-        <!-- Upcoming Work -->
-        <div class="card upcoming">
-            <h2><span class="icon">📅</span> Upcoming Work (Next 2 Weeks)</h2>
-            <ul class="task-list">
-                <li class="task-item">
-                    <span class="task-name">Begin review of chatbot</span>
-                    <span class="status-tag status-pending">Planned</span>
-                </li>
-                <li class="task-item">
-                    <span class="task-name">In Workday sandbox preview</span>
-                    <span class="status-tag status-pending">Planned</span>
-                </li>
-                <li class="task-item">
-                    <span class="task-name">Get to know processes across the team</span>
-                    <span class="status-tag status-pending">Planned</span>
-                </li>
-            </ul>
+        <div class="task-item" data-status="complete" data-tags="training">
+          <div class="task-dot"></div>
+          <div class="task-text">Completed compliance training</div>
+          <span class="task-status status-complete">Complete</span>
         </div>
+
+        <div class="task-item" data-status="complete" data-tags="meetings">
+          <div class="task-dot"></div>
+          <div class="task-text">Met with Ebony</div>
+          <span class="task-status status-complete">Complete</span>
+        </div>
+
+        <div class="task-item" data-status="complete" data-tags="meetings">
+          <div class="task-dot"></div>
+          <div class="task-text">Met with Brittany</div>
+          <span class="task-status status-complete">Complete</span>
+        </div>
+
+        <div class="task-item" data-status="complete" data-tags="meetings">
+          <div class="task-dot"></div>
+          <div class="task-text">Met with Tatiana</div>
+          <span class="task-status status-complete">Complete</span>
+        </div>
+
+        <div class="task-item" data-status="complete" data-tags="meetings">
+          <div class="task-dot"></div>
+          <div class="task-text">Met with Hailene</div>
+          <span class="task-status status-complete">Complete</span>
+        </div>
+
+        <div class="task-item" data-status="complete" data-tags="meetings">
+          <div class="task-dot"></div>
+          <div class="task-text">Met with Christine</div>
+          <span class="task-status status-complete">Complete</span>
+        </div>
+
+      </div>
+      <div class="no-results" id="recent-empty">No matching items</div>
     </div>
 
-    <h2 class="section-title">Responsibilities & Core Projects</h2>
-    <div class="project-grid">
+    <!-- Upcoming Work -->
+    <div class="period-card upcoming">
+      <h3>Upcoming Work (Next 2 Weeks)</h3>
+      <div class="task-list" id="upcoming-list">
+
+        <div class="task-item" data-status="planned" data-tags="">
+          <div class="task-dot"></div>
+          <div class="task-text">Begin review of chatbot</div>
+          <span class="task-status status-planned">Planned</span>
+        </div>
+
+        <div class="task-item" data-status="planned" data-tags="">
+          <div class="task-dot"></div>
+          <div class="task-text">In Workday sandbox preview</div>
+          <span class="task-status status-planned">Planned</span>
+        </div>
+
+        <div class="task-item" data-status="planned" data-tags="">
+          <div class="task-dot"></div>
+          <div class="task-text">Get to know processes across the team</div>
+          <span class="task-status status-planned">Planned</span>
+        </div>
+
+      </div>
+      <div class="no-results" id="upcoming-empty">No matching items</div>
     </div>
+
+  </div>
+
+  <!-- Responsibilities & Core Projects -->
+  <div class="section-title">
+    <h2>Responsibilities & Core Projects</h2>
+    <span>0 projects</span>
+  </div>
+  <div style="display:grid">
+    <div class="empty-state">No projects added yet</div>
+  </div>
+
 </div>
 
+<script>
+  let activeFilter = 'all';
+
+  function setFilter(el, filter) {
+    activeFilter = filter;
+    document.querySelectorAll('.summary-card').forEach(c => c.classList.remove('active-filter'));
+    el.classList.add('active-filter');
+    applyFilters();
+  }
+
+  function applyFilters() {
+    const search = document.getElementById('searchInput').value.toLowerCase().trim();
+    const statusSel = document.getElementById('statusFilter').value;
+    const clearBtn = document.getElementById('clearBtn');
+
+    const hasFilters = search || statusSel !== 'all' || activeFilter !== 'all';
+    clearBtn.style.display = hasFilters ? 'block' : 'none';
+
+    let total = 0;
+
+    document.querySelectorAll('.task-item').forEach(item => {
+      const text  = item.querySelector('.task-text').textContent.toLowerCase();
+      const status = item.dataset.status;
+      const tags   = item.dataset.tags;
+
+      const matchSearch = !search || text.includes(search);
+      const matchStatus = statusSel === 'all' || status === statusSel;
+      const matchFilter =
+        activeFilter === 'all'       ||
+        (activeFilter === 'complete' && status === 'complete') ||
+        (activeFilter === 'planned'  && status === 'planned')  ||
+        (activeFilter === 'meetings' && tags.includes('meetings')) ||
+        (activeFilter === 'training' && tags.includes('training'));
+
+      const visible = matchSearch && matchStatus && matchFilter;
+      item.style.display = visible ? '' : 'none';
+      if (visible) total++;
+    });
+
+    ['recent', 'upcoming'].forEach(id => {
+      const list    = document.getElementById(`${id}-list`);
+      const empty   = document.getElementById(`${id}-empty`);
+      const visible = list.querySelectorAll('.task-item:not([style*="display: none"])').length;
+      empty.style.display = visible === 0 ? 'block' : 'none';
+    });
+
+    document.getElementById('snapshot-count').textContent =
+      `${total} item${total !== 1 ? 's' : ''}`;
+  }
+
+  function clearFilters() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('statusFilter').value = 'all';
+    activeFilter = 'all';
+    document.querySelectorAll('.summary-card').forEach(c => c.classList.remove('active-filter'));
+    document.querySelector('[data-filter="all"]').classList.add('active-filter');
+    applyFilters();
+  }
+</script>
 </body>
 </html>
