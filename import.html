@@ -1,35 +1,3 @@
-
-Conversation with Gemini
-write me an html file that is a dashboard for me to track work to show to my manager what I am doing. make it pretty and professional, using Tebra colors and fonts. at the top have it be like "Current Work Overview" and then below that my name and last updated date. have a recent and upcoming work snapshot with work from the last two weeks and for the next two weeks. as well as a section below where i can have tiles of current responsibilities and projects
-
-Your professional Work Tracking Dashboard is ready. I have used a clean, modern aesthetic utilizing Tebra’s signature purple and teal color palette.
-
-The dashboard includes:
-
-Header Section: Clear title with placeholders for your name and the update date.
-
-Snapshot Grid: Two side-by-side cards for "Recent Work" and "Upcoming Work" to give your manager a quick look at your velocity.
-
-Status Tags: Color-coded labels (Complete, In Progress, Planned) for easy visual scanning.
-
-Responsibilities Tiles: A grid at the bottom for long-term projects, including progress bars to visualize completion.
-
-HTML icon
- Work_Track..._Dashboard 
-HTML
-How to use this:
-Download the HTML file.
-
-Open it in any web browser.
-
-To update the content, you can open the file in a simple text editor (like Notepad or TextEdit) and swap out the placeholder text within the <span>, <li>, and <h3> tags.
-
-
-
-
-
-Your Tebra chats aren’t used to improve our models. Gemini is AI and can make mistakes. Your privacy & GeminiOpens in a new window
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,7 +8,6 @@ Your Tebra chats aren’t used to improve our models. Gemini is AI and can make 
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 
         :root {
-            /* Tebra-inspired Palette */
             --tebra-purple: #522D80;
             --tebra-teal: #00B5AD;
             --tebra-dark: #2D3748;
@@ -87,7 +54,6 @@ Your Tebra chats aren’t used to improve our models. Gemini is AI and can make 
             font-weight: 600;
         }
 
-        /* Snapshot Section */
         .snapshot-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -153,7 +119,6 @@ Your Tebra chats aren’t used to improve our models. Gemini is AI and can make 
         .status-progress { background: #BEE3F8; color: #2A4365; }
         .status-pending { background: #EDF2F7; color: #4A5568; }
 
-        /* Projects Section */
         .section-title {
             font-size: 1.5rem;
             color: var(--tebra-purple);
@@ -217,7 +182,7 @@ Your Tebra chats aren’t used to improve our models. Gemini is AI and can make 
     <header>
         <h1>Current Work Overview</h1>
         <div class="user-info">
-            Prepared by <span>[Your Name Here]</span> &bull; Last Updated: <span>May 7, 2024</span>
+            <span>David Voci</span> &bull; Last Updated: <span>May 7, 2025</span>
         </div>
     </header>
 
@@ -227,19 +192,31 @@ Your Tebra chats aren’t used to improve our models. Gemini is AI and can make 
             <h2><span class="icon">✓</span> Recent Work (Last 2 Weeks)</h2>
             <ul class="task-list">
                 <li class="task-item">
-                    <span class="task-name">Q2 Revenue Audit Completion</span>
+                    <span class="task-name">Completed next training</span>
                     <span class="status-tag status-complete">Complete</span>
                 </li>
                 <li class="task-item">
-                    <span class="task-name">Tebra Dashboard UI Refinement</span>
+                    <span class="task-name">Completed compliance training</span>
                     <span class="status-tag status-complete">Complete</span>
                 </li>
                 <li class="task-item">
-                    <span class="task-name">Onboarding Documentation Update</span>
-                    <span class="status-tag status-progress">In Progress</span>
+                    <span class="task-name">Met with Ebony</span>
+                    <span class="status-tag status-complete">Complete</span>
                 </li>
                 <li class="task-item">
-                    <span class="task-name">Cross-functional Team Sync</span>
+                    <span class="task-name">Met with Brittany</span>
+                    <span class="status-tag status-complete">Complete</span>
+                </li>
+                <li class="task-item">
+                    <span class="task-name">Met with Tatiana</span>
+                    <span class="status-tag status-complete">Complete</span>
+                </li>
+                <li class="task-item">
+                    <span class="task-name">Met with Hailene</span>
+                    <span class="status-tag status-complete">Complete</span>
+                </li>
+                <li class="task-item">
+                    <span class="task-name">Met with Christine</span>
                     <span class="status-tag status-complete">Complete</span>
                 </li>
             </ul>
@@ -250,19 +227,15 @@ Your Tebra chats aren’t used to improve our models. Gemini is AI and can make 
             <h2><span class="icon">📅</span> Upcoming Work (Next 2 Weeks)</h2>
             <ul class="task-list">
                 <li class="task-item">
-                    <span class="task-name">Stakeholder Presentation: Q3 Goals</span>
+                    <span class="task-name">Begin review of chatbot</span>
                     <span class="status-tag status-pending">Planned</span>
                 </li>
                 <li class="task-item">
-                    <span class="task-name">Phase 2 API Integration Testing</span>
-                    <span class="status-tag status-pending">High Priority</span>
-                </li>
-                <li class="task-item">
-                    <span class="task-name">Internal Workflow Optimization</span>
+                    <span class="task-name">In Workday sandbox preview</span>
                     <span class="status-tag status-pending">Planned</span>
                 </li>
                 <li class="task-item">
-                    <span class="task-name">Monthly Performance Review Prep</span>
+                    <span class="task-name">Get to know processes across the team</span>
                     <span class="status-tag status-pending">Planned</span>
                 </li>
             </ul>
@@ -271,57 +244,6 @@ Your Tebra chats aren’t used to improve our models. Gemini is AI and can make 
 
     <h2 class="section-title">Responsibilities & Core Projects</h2>
     <div class="project-grid">
-        <!-- Project 1 -->
-        <div class="project-tile">
-            <h3>Product Lifecycle Mgmt</h3>
-            <p class="project-desc">Overseeing the end-to-end development cycle for the new billing module.</p>
-            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 5px;">
-                <span>Progress</span>
-                <span>75%</span>
-            </div>
-            <div class="progress-bar-container">
-                <div class="progress-bar-fill" style="width: 75%;"></div>
-            </div>
-        </div>
-
-        <!-- Project 2 -->
-        <div class="project-tile">
-            <h3>Customer Success Lead</h3>
-            <p class="project-desc">Managing Tier 1 technical escalations and improving resolution timeframes.</p>
-            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 5px;">
-                <span>KPI Achievement</span>
-                <span>92%</span>
-            </div>
-            <div class="progress-bar-container">
-                <div class="progress-bar-fill" style="width: 92%;"></div>
-            </div>
-        </div>
-
-        <!-- Project 3 -->
-        <div class="project-tile">
-            <h3>Internal Tooling</h3>
-            <p class="project-desc">Building automated reporting scripts to reduce manual data entry for the team.</p>
-            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 5px;">
-                <span>Progress</span>
-                <span>40%</span>
-            </div>
-            <div class="progress-bar-container">
-                <div class="progress-bar-fill" style="width: 40%;"></div>
-            </div>
-        </div>
-
-        <!-- Project 4 -->
-        <div class="project-tile">
-            <h3>Training & Mentorship</h3>
-            <p class="project-desc">Leading bi-weekly knowledge sharing sessions for junior developers.</p>
-            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 5px;">
-                <span>Status</span>
-                <span>Ongoing</span>
-            </div>
-            <div class="progress-bar-container">
-                <div class="progress-bar-fill" style="width: 100%; background: var(--tebra-purple);"></div>
-            </div>
-        </div>
     </div>
 </div>
 
